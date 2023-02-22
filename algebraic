@@ -1,0 +1,38 @@
+% Phase 1 input parameters
+C=[2,3,4,7];
+A=[2,3,-1,4; 1,-2,6,-7];
+b=[8 ; -3];
+
+% Phase 2: No. of constraints and variables
+m=size(A,1); % no. of constraints
+n=size(A,2); % no. of variables
+
+% Phase 3: compute nCm BFS
+nv=nchoosek(n,m); %no. of basic solution
+t= nchoosek(1:n,m);
+
+% Phase 4: construct the Basic solution 
+sol=[];     %default solution is zero
+if n>=m
+    for i=1:nv
+        y = zeros(n,1);
+        x = A(:,t(i,:))\b;
+%        check feasibility condition
+       if all(x>=0 & x~=inf &x~=-inf)
+         y(t(i,:)) = x;
+         sol=[sol y];
+       end
+     end
+    else
+        error('Equation is larger than Variables')
+end
+% Phase 5: objective function
+z= C*sol;
+%Phase 6: finding optimal value
+[zmax,Zind] = max(Z);
+BFS = sol(:,Zind);
+%Phase 7: print all the solutions
+optval = [BFS' zmax];   %index corresponding to max value
+OPTIMAL_BFS = array2table(optval);%print in table
+OPTIMAL_BFS.Properties.VariableNames(1:size(OPTIMAL_BFS,2)) = {'x_1','x_2','x_3','x_4','value_of_z'}
+  
